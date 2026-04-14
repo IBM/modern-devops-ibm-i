@@ -1,5 +1,490 @@
-<h2>Modern DevOps for IBM i</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBM i DevOps Acceleration Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam interdum, ipsum at luctus bibendum, orci sem mattis risus, nec iaculis lacus mauris sit amet lorem. Praesent et ipsum nulla. Fusce vitae dui in elit semper semper vel a lorem. Phasellus id quam augue. Ut tempus commodo imperdiet. Maecenas nec sem lobortis, dictum orci nec, suscipit nulla. Praesent pretium nulla at iaculis blandit. Nunc lacinia suscipit ante in efficitur. Fusce consectetur tempor ligula, sed pharetra mauris ultricies at. Quisque vel eros vel purus facilisis scelerisque id nec velit. In porta bibendum neque in rhoncus. Aliquam id posuere metus. Integer lorem urna, mattis vel tincidunt vel, rutrum quis risus. Morbi ut bibendum odio. Ut nec laoreet nibh. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-</p>
-<p>Pellentesque vitae feugiat nulla. Nunc tristique ultrices libero, pretium porttitor enim dictum ac. Donec sapien est, interdum vel ultricies at, auctor vitae mi. Donec placerat purus est, vel facilisis quam volutpat ac. Curabitur pulvinar gravida sodales.</p>
+        body {
+            font-family: 'IBM Plex Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #161616;
+        }
+
+        /* Header */
+        header {
+            background: #0f62fe;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f62fe 0%, #0043ce 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #0f62fe;
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #161616;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #0f62fe;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #0f62fe;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Learning Paths */
+        .learning-paths {
+            background: #f4f4f4;
+        }
+
+        .path-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #0f62fe;
+        }
+
+        .path-card h3 {
+            color: #0f62fe;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .path-modules {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .module-tag {
+            background: #e0e0e0;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #161616;
+            border: 1px solid #c6c6c6;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+
+        .resource-card:hover {
+            transform: scale(1.05);
+            border-color: #0f62fe;
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card h4 {
+            color: #0f62fe;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #161616;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        .highlight {
+            background: #d0e2ff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <span>🔷</span>
+                <span>IBM i DevOps Acceleration</span>
+            </div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features 1</a></li>
+                <li><a href="#paths">Learning Paths</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>IBM i DevOps Acceleration Program</h1>
+        <p>Modernize your IBM i development with cutting-edge DevOps practices. Learn to automate, integrate, and deploy applications on the IBM i platform efficiently.</p>
+        <a href="#paths" class="cta-button">Start Your Journey</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container" id="features">
+        <h2 class="section-title">Why IBM i DevOps?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Modernize Legacy Systems</h3>
+                <p>Transform traditional IBM i development workflows with modern DevOps practices. Bridge the gap between legacy RPG/COBOL and contemporary methodologies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>Automated Build & Deploy</h3>
+                <p>Implement CI/CD pipelines for IBM i applications using tools like Jenkins, GitLab CI, and Azure DevOps with IBM i integration.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Version Control for RPG</h3>
+                <p>Master Git workflows for RPG, CL, DDS, and SQL source code. Learn best practices for managing IBM i source members.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Modern Development Tools</h3>
+                <p>Utilize RDi (Rational Developer for i), VS Code with IBM i extensions, and other modern IDEs for enhanced productivity.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3>Automated Testing</h3>
+                <p>Implement unit testing frameworks for RPG and COBOL. Learn to use RPGUnit and integrate testing into your CI/CD pipeline.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Application Lifecycle Management</h3>
+                <p>Manage the complete lifecycle of IBM i applications from development through production deployment with proper change management.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Paths Section -->
+    <section class="learning-paths" id="paths">
+        <div class="container">
+            <h2 class="section-title">Learning Paths</h2>
+            
+            <div class="path-card">
+                <h3>🎯 IBM i DevOps Fundamentals</h3>
+                <p>Start with the basics of DevOps on IBM i. Understand the platform architecture, traditional development practices, and how to transition to modern DevOps workflows.</p>
+                <div class="path-modules">
+                    <span class="module-tag">IBM i Architecture Overview</span>
+                    <span class="module-tag">Traditional vs Modern Development</span>
+                    <span class="module-tag">DevOps Culture for IBM i</span>
+                    <span class="module-tag">Source Management Basics</span>
+                    <span class="module-tag">IFS and Integrated File System</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>🔧 Version Control for IBM i</h3>
+                <p>Master Git and version control for IBM i source code. Learn to manage RPG, COBOL, CL, DDS, and SQL sources in modern repositories.</p>
+                <div class="path-modules">
+                    <span class="module-tag">Git Fundamentals</span>
+                    <span class="module-tag">Managing Source Members</span>
+                    <span class="module-tag">Branching Strategies</span>
+                    <span class="module-tag">Code Review Workflows</span>
+                    <span class="module-tag">Merging and Conflict Resolution</span>
+                    <span class="module-tag">GitHub/GitLab for IBM i</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>🏗️ CI/CD Pipeline for IBM i</h3>
+                <p>Build automated pipelines for IBM i applications. Learn to compile, test, and deploy RPG and COBOL programs automatically.</p>
+                <div class="path-modules">
+                    <span class="module-tag">Jenkins for IBM i</span>
+                    <span class="module-tag">GitLab CI/CD Integration</span>
+                    <span class="module-tag">Azure DevOps Pipelines</span>
+                    <span class="module-tag">Automated Compilation</span>
+                    <span class="module-tag">Deployment Automation</span>
+                    <span class="module-tag">Pipeline as Code</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>💻 Modern IBM i Development Tools</h3>
+                <p>Explore modern IDEs and tools for IBM i development. Enhance productivity with RDi, VS Code, and other contemporary development environments.</p>
+                <div class="path-modules">
+                    <span class="module-tag">Rational Developer for i (RDi)</span>
+                    <span class="module-tag">VS Code with IBM i Extensions</span>
+                    <span class="module-tag">Code for IBM i Plugin</span>
+                    <span class="module-tag">Remote Development Setup</span>
+                    <span class="module-tag">Debugging Techniques</span>
+                    <span class="module-tag">Performance Profiling</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>🧪 Testing and Quality Assurance</h3>
+                <p>Implement comprehensive testing strategies for IBM i applications. Learn unit testing, integration testing, and automated quality checks.</p>
+                <div class="path-modules">
+                    <span class="module-tag">RPGUnit Framework</span>
+                    <span class="module-tag">Unit Testing for RPG</span>
+                    <span class="module-tag">Integration Testing</span>
+                    <span class="module-tag">Test Automation</span>
+                    <span class="module-tag">Code Quality Tools</span>
+                    <span class="module-tag">Static Code Analysis</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>📦 Application Deployment & Management</h3>
+                <p>Master deployment strategies and application lifecycle management on IBM i. Learn to manage libraries, objects, and configurations across environments.</p>
+                <div class="path-modules">
+                    <span class="module-tag">Library Management</span>
+                    <span class="module-tag">Object Deployment</span>
+                    <span class="module-tag">Environment Configuration</span>
+                    <span class="module-tag">Change Management</span>
+                    <span class="module-tag">Rollback Strategies</span>
+                    <span class="module-tag">Production Deployment</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>🔐 Security and Compliance</h3>
+                <p>Implement security best practices in your DevOps workflows. Learn about IBM i security features, compliance requirements, and secure coding practices.</p>
+                <div class="path-modules">
+                    <span class="module-tag">IBM i Security Model</span>
+                    <span class="module-tag">User Authentication</span>
+                    <span class="module-tag">Authority Management</span>
+                    <span class="module-tag">Audit and Compliance</span>
+                    <span class="module-tag">Secure Coding Practices</span>
+                    <span class="module-tag">Vulnerability Scanning</span>
+                </div>
+            </div>
+
+            <div class="path-card">
+                <h3>📊 Monitoring and Performance</h3>
+                <p>Monitor IBM i applications and system performance. Learn to implement logging, alerting, and performance optimization strategies.</p>
+                <div class="path-modules">
+                    <span class="module-tag">System Monitoring</span>
+                    <span class="module-tag">Application Logging</span>
+                    <span class="module-tag">Performance Metrics</span>
+                    <span class="module-tag">Job Monitoring</span>
+                    <span class="module-tag">Database Performance</span>
+                    <span class="module-tag">Alerting and Notifications</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="container" id="resources">
+        <h2 class="section-title">Additional Resources</h2>
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="resource-icon">📖</div>
+                <h4>IBM i Documentation</h4>
+                <p>Official IBM i guides and references</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">🎥</div>
+                <h4>Video Tutorials</h4>
+                <p>Step-by-step IBM i DevOps lessons</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">💬</div>
+                <h4>Community Forum</h4>
+                <p>Connect with IBM i developers</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">📝</div>
+                <h4>Best Practices Guide</h4>
+                <p>IBM i DevOps patterns and practices</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">🔬</div>
+                <h4>Hands-on Labs</h4>
+                <p>Practice with real IBM i systems</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">🛠️</div>
+                <h4>Tools & Utilities</h4>
+                <p>Essential IBM i DevOps tools</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">📚</div>
+                <h4>Code Samples</h4>
+                <p>RPG, COBOL, and CL examples</p>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">🎓</div>
+                <h4>Certification Prep</h4>
+                <p>IBM i certification resources</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 IBM i DevOps Acceleration Program. All rights reserved.</p>
+        <p>Empowering IBM i developers to embrace modern DevOps practices.</p>
+    </footer>
+</body>
+</html>
