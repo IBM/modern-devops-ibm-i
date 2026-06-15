@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementing DevOps on IBM i</title>
+    
+    <!-- IBM Plex Font -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Carbon Components CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.0/css/carbon-components.min.css">
+    
+    <!-- Carbon Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@carbon/grid@11.8.0/css/grid.min.css">
+    
+    <style>
+        /* Custom Carbon-compliant styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--cds-background, #ffffff);
+            color: var(--cds-text-primary, #161616);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #0a0a0a;
+            padding: 1rem 0;
+            background-color: #f4f4f4;
+        }
+
+        .breadcrumb a {
+            display: inline-flex;
+            align-items: center;
+            color: #0f62fe;
+            text-decoration: none;
+        }
+
+        .breadcrumb-home-icon {
+            width: 20px;
+            height: 20px;
+            fill: #0f62fe;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: var(--cds-layer-01, #f4f4f4);
+            padding: var(--cds-spacing-07, 2rem) 0;
+        }
+
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+            max-width: 1584px;
+            padding: 0 var(--cds-spacing-05, 1rem);
+            margin: 0 auto;
+        }
+
+        .progress-bar-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .progress-item:first-child {
+            align-items: flex-start;
+            text-align: left;
+            flex: 0.2;
+        }
+
+        .progress-item:last-child {
+            align-items: flex-end;
+            text-align: right;
+            flex: 1;
+        }
+
+        .progress-item.module,
+        .progress-item.end {
+            cursor: pointer;
+        }
+
+        .progress-item.module:hover .progress-circle,
+        .progress-item.end:hover .progress-circle {
+            background: #e8e8e8;
+        }
+
+        .progress-item.module.completed .progress-circle,
+        .progress-item.end.completed .progress-circle {
+            background: #24a148;
+            border-color: #24a148;
+        }
+
+        .progress-item.module.completed .progress-circle svg,
+        .progress-item.end.completed .progress-circle svg {
+            fill: #ffffff;
+        }
+
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--cds-spacing-03, 0.5rem);
+            transition: all 0.2s ease;
+        }
+
+        .progress-item.start .progress-circle {
+            background: #24a148;
+            border-color: #24a148;
+        }
+
+        .progress-item.start .progress-circle svg {
+            fill: #ffffff;
+        }
+
+        .progress-item.end .progress-circle {
+            background: #ffffff;
+            border-color: #e0e0e0;
+        }
+
+        .progress-item.end .progress-circle svg {
+            fill: #525252;
+        }
+
+        .progress-circle svg {
+            width: 16px;
+            height: 16px;
+            fill: #525252;
+        }
+
+        .progress-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #161616;
+            margin-bottom: var(--cds-spacing-02, 0.25rem);
+        }
+
+        .progress-subtitle {
+            font-size: 0.75rem;
+            color: #525252;
+        }
+
+        @media (max-width: 768px) {
+            .progress-bar-container {
+                flex-direction: column;
+                gap: var(--cds-spacing-05, 1rem);
+            }
+
+            .progress-bar-line {
+                display: none;
+            }
+
+            .progress-item {
+                max-width: 100%;
+                align-items: flex-start !important;
+                text-align: left !important;
+            }
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(180deg, #4589ff 0%, #d4bbff 100%);
+            padding: var(--cds-spacing-07, 2rem) 0 var(--cds-spacing-07, 2rem);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 2fr;
+            gap: var(--cds-spacing-06, 1.5rem);
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+            color: var(--cds-text-secondary, #525252);
+            letter-spacing: 0.08em;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            margin-bottom: var(--cds-spacing-05, 1rem);
+            line-height: 1.1;
+            font-weight: 500;
+            font-size: 3.5rem;
+        }
+
+        .hero-description {
+            margin-bottom: 0;
+            color: var(--cds-text-secondary, #000000);
+            font-size: 1rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--cds-spacing-05, 1rem);
+        }
+
+        .hero-actions .bx--btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 16rem;
+            padding-right: 1rem;
+        }
+
+        .hero-actions .bx--btn svg {
+            flex-shrink: 0;
+            margin-left: var(--cds-spacing-05, 1rem);
+        }
+
+        .hero-image-wrap {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .hero-image {
+            display: block;
+            width: auto;
+            height: 200px;
+            filter: invert(21%) sepia(98%) saturate(3089%) hue-rotate(215deg) brightness(95%) contrast(101%);
+        }
+
+        /* Section spacing */
+        .section-spacing {
+            padding: var(--cds-spacing-10, 4rem) 0;
+        }
+
+        #resources.section-spacing {
+            padding-top: var(--cds-spacing-07, 2rem);
+        }
+
+        /* Learning Paths Background */
+        .learning-paths {
+            background: var(--cds-layer-01, #f4f4f4);
+            padding-top: var(--cds-spacing-05, 1rem) !important;
+        }
+
+        /* Path Cards */
+        .path-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--cds-spacing-06, 1.5rem);
+        }
+
+        @media (max-width: 768px) {
+            .path-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .path-card {
+            display: block;
+            border-top: 5px solid var(--cds-interactive-01, #4589ff);
+            border-right: 1px solid var(--cds-border-subtle, #4589ff);
+            border-bottom: 1px solid var(--cds-border-subtle, #4589ff);
+            border-left: 1px solid var(--cds-border-subtle, #4589ff);
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .path-card:hover,
+        .path-card:focus {
+            text-decoration: none;
+        }
+
+        .path-card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--cds-spacing-04, 0.75rem);
+            margin-bottom: var(--cds-spacing-03, 0.5rem);
+        }
+
+        .path-card-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            object-fit: contain;
+            filter: invert(21%) sepia(98%) saturate(3089%) hue-rotate(215deg) brightness(95%) contrast(101%);
+        }
+
+        .path-card h4 {
+            margin: 0;
+        }
+
+        .path-modules {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--cds-spacing-03, 0.5rem);
+            margin-top: var(--cds-spacing-05, 1rem);
+        }
+
+        /* Resources Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            column-gap: var(--cds-spacing-05, 1rem);
+            row-gap: var(--cds-spacing-05, 1rem);
+            align-items: stretch;
+        }
+
+        @media (max-width: 1056px) {
+            .resources-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 672px) {
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .resource-tile {
+            display: block;
+            min-height: 100%;
+            padding: var(--cds-spacing-06, 1.5rem);
+            border-top: 3px solid var(--cds-interactive-01, #0f62fe);
+            border-right: 1px solid var(--cds-border-subtle, #e0e0e0);
+            border-bottom: 1px solid var(--cds-border-subtle, #e0e0e0);
+            border-left: 1px solid var(--cds-border-subtle, #e0e0e0);
+            color: inherit;
+            text-decoration: none;
+            background: var(--cds-layer, #ffffff);
+        }
+
+        .resource-tile:hover,
+        .resource-tile:focus {
+            text-decoration: none;
+        }
+
+        .resource-tile h4 {
+            margin-bottom: var(--cds-spacing-03, 0.5rem);
+        }
+
+        /* Key Benefits Section */
+        .key-benefits {
+            background: var(--cds-layer, #ffffff);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--cds-spacing-06, 1.5rem);
+        }
+
+        @media (max-width: 1056px) {
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 672px) {
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .benefit-card {
+            padding: var(--cds-spacing-06, 1.5rem);
+            border-left: 3px solid var(--cds-interactive-01, #0f62fe);
+            background: var(--cds-layer-01, #f4f4f4);
+        }
+
+        .benefit-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: var(--cds-spacing-05, 1rem);
+            fill: var(--cds-interactive-01, #0f62fe);
+        }
+
+        .benefit-card h4 {
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+        }
+
+        .benefit-card p {
+            margin-bottom: 0;
+            color: var(--cds-text-secondary, #525252);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #e5f6ff;
+            border-left: 4px solid #0f62fe;
+            padding: var(--cds-spacing-06, 1.5rem);
+            margin: var(--cds-spacing-06, 1.5rem) 0 0 0;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+            color: #0f62fe;
+            font-size: 1rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0;
+            color: var(--cds-text-primary, #161616);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--cds-background-inverse, #161616);
+            color: var(--cds-text-inverse, #ffffff);
+            text-align: center;
+            padding: var(--cds-spacing-07, 2rem);
+            margin-top: var(--cds-spacing-10, 4rem);
+        }
+
+        footer p {
+            margin-bottom: var(--cds-spacing-03, 0.5rem);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="bx--grid">
+            <!-- Breadcrumb -->
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <div class="breadcrumb" style="background-color: transparent; padding: 0; margin-bottom: var(--cds-spacing-05, 1rem);">
+                        <a href="index.html">
+                            <svg class="breadcrumb-home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <path d="M16.6123,2.2138a1.01,1.01,0,0,0-1.2427,0L1,13.4194l1.2427,1.5717L4,13.6209V26a2.0041,2.0041,0,0,0,2,2H26a2.0037,2.0037,0,0,0,2-2V13.63L29.7573,15,31,13.4282ZM18,26H14V18h4Zm2,0V18a2.0023,2.0023,0,0,0-2-2H14a2.002,2.002,0,0,0-2,2v8H6V12.0615l10-7.79,10,7.8005V26Z"/>
+                            </svg>
+                        </a> / Implementing DevOps on IBM i
+                    </div>
+                </div>
+            </div>
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                             <p style="font-size: 0.875rem; font-weight: 500; letter-spacing: 0.08em; margin-bottom: var(--cds-spacing-04, 0.75rem); color: var(--cds-text-secondary, #0a0a0a);">Learning track 2</p>
+                            <h1 class="bx--type-expressive-heading-06 hero-title">Implementing DevOps on IBM i</h1>
+                            <p class="bx--type-body-long-02 hero-description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed nisl in ligula semper semper in eget nunc. Maecenas ac tempor dui. Suspendisse posuere enim at mi sodales, vitae fermentum ex ornare. Suspendisse sagittis orci vitae ornare vehicula. Nunc at dolor aliquet, aliquet neque sed, ultrices lacus. Mauris at tellus quis ipsum finibus congue ut ac ipsum. Sed consectetur consequat arcu. Fusce vitae nisi viverra purus ullamcorper dignissim. Aenean ac urna nunc.
+                            </p>
+                        </div>
+                        <div class="hero-image-wrap">
+                            <img class="hero-image" src="devops.svg" alt="DevOps lifecycle">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Learning Paths Section -->
+     <!--
+    <section class="learning-paths section-spacing" id="paths">
+        <div class="bx--grid">
+            <div class="bx--row" style="margin-bottom: var(--cds-spacing-09, 3rem);">
+                <div class="bx--col-lg-16">
+                    <div style="display: grid; grid-template-columns: 8fr 8fr; gap: var(--cds-spacing-06, 1.5rem);">
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bx--row style="margin-bottom: var(--cds-spacing-09, 3rem);">
+                <div class="bx--col-lg-16">
+                    <div class="path-cards-grid">
+                        <a class="bx--tile path-card" href="fundamentals/index.html">
+                            <div class="path-card-header">
+                                <img src="devops--loop--02.svg" alt="" class="path-card-icon">
+                                <h4 class="bx--type-productive-heading-04">Module 1: DevOps Fundamentals for IBM i</h4>
+                            </div>
+                            <p class="bx--type-body-long-01">Understand DevOps principles and how they apply to IBM i environments.</p>
+                            <div class="path-modules">
+                                <span class="bx--tag bx--tag--blue">DevOps 101</span>
+                                <span class="bx--tag bx--tag--blue">Traditional vs modern IBM i development workflows</span>
+                                <span class="bx--tag bx--tag--blue">IBM i architecture essentials</span>
+                                <span class="bx--tag bx--tag--blue">Adopting a DevOps culture</span>
+                            </div>
+                        </a>
+
+                        <a class="bx--tile path-card" href="#">
+                            <div class="path-card-header">
+                                <img src="developer-tools.svg" alt="" class="path-card-icon">
+                                <h4 class="bx--type-productive-heading-04">Module 2: DevOps tools for IBM i development environments</h4>
+                            </div>
+                            <p class="bx--type-body-long-01">Improve developer productivity with modern tooling.</p>
+                            <div class="path-modules">
+                                <span class="bx--tag bx--tag--blue">IDE landscape</span>
+                                <span class="bx--tag bx--tag--blue">Remote development and connectivity</span>
+                                <span class="bx--tag bx--tag--blue">CLI tools and scripting workflows</span>
+                                <span class="bx--tag bx--tag--blue">Open source on IBM i </span>
+                            </div>
+                        </a>
+
+                        <a class="bx--tile path-card" href="#">
+                            <div class="path-card-header">
+                                <img src="ibm--bob.svg" alt="" class="path-card-icon">
+                                <h4 class="bx--type-productive-heading-04">Module 3: What about Bob?</h4>
+                            </div>
+                            <p class="bx--type-body-long-01">Use <strong>IBM Bob for i</strong> for an AI-powered development experience designed to improve productivity, code quality, and DevOps workflows on IBM i.</p>
+                            <div class="path-modules">
+                                <span class="bx--tag bx--tag--blue">What is IBM Bob?</span>
+                                <span class="bx--tag bx--tag--blue">Why AI assistants matter in DevOps</span>
+                                <span class="bx--tag bx--tag--blue">Bob for i use cases and best practices</span>
+                            </div>
+                        </a>
+
+                        <a class="bx--tile path-card" href="#">
+                            <div class="path-card-header">
+                                <img src="systems-devops--cicd-pipeline.svg" alt="" class="path-card-icon">
+                                <h4 class="bx--type-productive-heading-04">Module 4: Version control with Git</h4>
+                            </div>
+                            <p class="bx--type-body-long-01">Use Git as the single source of truth for modern IBM i development.</p>
+                            <div class="path-modules">
+                                <span class="bx--tag bx--tag--blue">Why Git for IBM i </span>
+                                <span class="bx--tag bx--tag--blue">Repository structuring for IBM i apps</span>
+                                <span class="bx--tag bx--tag--blue">Branching strategies</span>
+                                <span class="bx--tag bx--tag--blue">Pull requests and code review workflows</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">🧪 Testing and Quality Assurance</h3>
+                        <p class="bx--type-body-long-01">Implement comprehensive testing strategies for IBM i applications. Learn unit testing, integration testing, and automated quality checks.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">RPGUnit Framework</span>
+                            <span class="bx--tag bx--tag--blue">Unit Testing for RPG</span>
+                            <span class="bx--tag bx--tag--blue">Integration Testing</span>
+                            <span class="bx--tag bx--tag--blue">Test Automation</span>
+                            <span class="bx--tag bx--tag--blue">Code Quality Tools</span>
+                            <span class="bx--tag bx--tag--blue">Static Code Analysis</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">📦 Application Deployment & Management</h3>
+                        <p class="bx--type-body-long-01">Master deployment strategies and application lifecycle management on IBM i. Learn to manage libraries, objects, and configurations across environments.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">Library Management</span>
+                            <span class="bx--tag bx--tag--blue">Object Deployment</span>
+                            <span class="bx--tag bx--tag--blue">Environment Configuration</span>
+                            <span class="bx--tag bx--tag--blue">Change Management</span>
+                            <span class="bx--tag bx--tag--blue">Rollback Strategies</span>
+                            <span class="bx--tag bx--tag--blue">Production Deployment</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">🔐 Security and Compliance</h3>
+                        <p class="bx--type-body-long-01">Implement security best practices in your DevOps workflows. Learn about IBM i security features, compliance requirements, and secure coding practices.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">IBM i Security Model</span>
+                            <span class="bx--tag bx--tag--blue">User Authentication</span>
+                            <span class="bx--tag bx--tag--blue">Authority Management</span>
+                            <span class="bx--tag bx--tag--blue">Audit and Compliance</span>
+                            <span class="bx--tag bx--tag--blue">Secure Coding Practices</span>
+                            <span class="bx--tag bx--tag--blue">Vulnerability Scanning</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">📊 Monitoring and Performance</h3>
+                        <p class="bx--type-body-long-01">Monitor IBM i applications and system performance. Learn to implement logging, alerting, and performance optimization strategies.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">System Monitoring</span>
+                            <span class="bx--tag bx--tag--blue">Application Logging</span>
+                            <span class="bx--tag bx--tag--blue">Performance Metrics</span>
+                            <span class="bx--tag bx--tag--blue">Job Monitoring</span>
+                            <span class="bx--tag bx--tag--blue">Database Performance</span>
+                            <span class="bx--tag bx--tag--blue">Alerting and Notifications</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">🧪 Testing and Quality Assurance</h3>
+                        <p class="bx--type-body-long-01">Implement comprehensive testing strategies for IBM i applications. Learn unit testing, integration testing, and automated quality checks.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">RPGUnit Framework</span>
+                            <span class="bx--tag bx--tag--blue">Unit Testing for RPG</span>
+                            <span class="bx--tag bx--tag--blue">Integration Testing</span>
+                            <span class="bx--tag bx--tag--blue">Test Automation</span>
+                            <span class="bx--tag bx--tag--blue">Code Quality Tools</span>
+                            <span class="bx--tag bx--tag--blue">Static Code Analysis</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">📦 Application Deployment & Management</h3>
+                        <p class="bx--type-body-long-01">Master deployment strategies and application lifecycle management on IBM i. Learn to manage libraries, objects, and configurations across environments.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">Library Management</span>
+                            <span class="bx--tag bx--tag--blue">Object Deployment</span>
+                            <span class="bx--tag bx--tag--blue">Environment Configuration</span>
+                            <span class="bx--tag bx--tag--blue">Change Management</span>
+                            <span class="bx--tag bx--tag--blue">Rollback Strategies</span>
+                            <span class="bx--tag bx--tag--blue">Production Deployment</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">🔐 Security and Compliance</h3>
+                        <p class="bx--type-body-long-01">Implement security best practices in your DevOps workflows. Learn about IBM i security features, compliance requirements, and secure coding practices.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">IBM i Security Model</span>
+                            <span class="bx--tag bx--tag--blue">User Authentication</span>
+                            <span class="bx--tag bx--tag--blue">Authority Management</span>
+                            <span class="bx--tag bx--tag--blue">Audit and Compliance</span>
+                            <span class="bx--tag bx--tag--blue">Secure Coding Practices</span>
+                            <span class="bx--tag bx--tag--blue">Vulnerability Scanning</span>
+                        </div>
+                    </a>
+
+                    <a class="bx--tile path-card" href="#">
+                        <h3 class="bx--type-productive-heading-04">📊 Monitoring and Performance</h3>
+                        <p class="bx--type-body-long-01">Monitor IBM i applications and system performance. Learn to implement logging, alerting, and performance optimization strategies.</p>
+                        <div class="path-modules">
+                            <span class="bx--tag bx--tag--blue">System Monitoring</span>
+                            <span class="bx--tag bx--tag--blue">Application Logging</span>
+                            <span class="bx--tag bx--tag--blue">Performance Metrics</span>
+                            <span class="bx--tag bx--tag--blue">Job Monitoring</span>
+                            <span class="bx--tag bx--tag--blue">Database Performance</span>
+                            <span class="bx--tag bx--tag--blue">Alerting and Notifications</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>-->
+
+    <!-- Resources Section -->
+    <!-- <section class="section-spacing" id="resources">
+        <div class="bx--grid">
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <h2 class="bx--type-expressive-heading-05" style="text-align: center; margin-bottom: var(--cds-spacing-09, 3rem);">Additional Resources</h2>
+                </div>
+            </div>
+            <div class="bx--row">
+                <div class="bx--col-lg-16" style="padding-right: 0;">
+                    <div class="resources-grid">
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">IBM i Documentation</h4>
+                            <p class="bx--type-body-short-01">Official IBM i guides and references</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Video Tutorials</h4>
+                            <p class="bx--type-body-short-01">Step-by-step IBM i DevOps lessons</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Community Forum</h4>
+                            <p class="bx--type-body-short-01">Connect with IBM i developers</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Best Practices Guide</h4>
+                            <p class="bx--type-body-short-01">IBM i DevOps patterns and practices</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Hands-on Labs</h4>
+                            <p class="bx--type-body-short-01">Practice with real IBM i systems</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Tools & Utilities</h4>
+                            <p class="bx--type-body-short-01">Essential IBM i DevOps tools</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Code Samples</h4>
+                            <p class="bx--type-body-short-01">RPG, COBOL, and CL examples</p>
+                        </a>
+                        <a class="bx--tile resource-tile" href="#">
+                            <h4 class="bx--type-productive-heading-03">Certification Prep</h4>
+                            <p class="bx--type-body-short-01">IBM i certification resources</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+   
+
+    <script>
+        function toggleModule(moduleNumber) {
+            const moduleItem = document.getElementById('module-' + moduleNumber);
+            const moduleCircle = document.getElementById('module-' + moduleNumber + '-circle');
+            
+            if (moduleItem.classList.contains('completed')) {
+                // Uncomplete - change back to circle
+                moduleItem.classList.remove('completed');
+                moduleCircle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3"></circle></svg>';
+            } else {
+                // Complete - change to checkmark
+                moduleItem.classList.add('completed');
+                moduleCircle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M13 24L4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path></svg>';
+            }
+        }
+
+        function toggleComplete() {
+            const completeItem = document.getElementById('complete-item');
+            const completeCircle = document.getElementById('complete-circle');
+            
+            if (completeItem.classList.contains('completed')) {
+                // Uncomplete - change back to circle
+                completeItem.classList.remove('completed');
+                completeCircle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3"></circle></svg>';
+            } else {
+                // Complete - change to checkmark
+                completeItem.classList.add('completed');
+                completeCircle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M13 24L4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path></svg>';
+            }
+        }
+    </script>
+</body>
+</html>
