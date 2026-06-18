@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Modern DevOps for IBM i</title>
+    
+    <!-- IBM Plex Font -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Carbon Components CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.0/css/carbon-components.min.css">
+    
+    <!-- Carbon Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@carbon/grid@11.8.0/css/grid.min.css">
+    
+    <style>
+        /* Custom Carbon-compliant styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--cds-background, #ffffff);
+            color: var(--cds-text-primary, #161616);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #0a0a0a;
+            padding: 1rem 0;
+            background-color: #f4f4f4;
+        }
+
+        .breadcrumb a {
+            display: inline-flex;
+            align-items: center;
+            color: #0f62fe;
+            text-decoration: none;
+        }
+
+        .breadcrumb-home-icon {
+            width: 20px;
+            height: 20px;
+            fill: #0f62fe;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(180deg, #4589ff 0%, #d4bbff 100%);
+            padding: var(--cds-spacing-07, 2rem) 0 var(--cds-spacing-07, 2rem);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 2fr;
+            gap: var(--cds-spacing-06, 1.5rem);
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+            color: var(--cds-text-secondary, #525252);
+            letter-spacing: 0.08em;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            margin-bottom: var(--cds-spacing-05, 1rem);
+            line-height: 1.1;
+            font-weight: 500;
+            font-size: 3.5rem;
+        }
+
+        .hero-description {
+            margin-bottom: 0;
+            color: var(--cds-text-secondary, #000000);
+            font-size: 1rem;
+        }
+
+        .hero-image-wrap {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .hero-image {
+            display: block;
+            width: auto;
+            height: 200px;
+            filter: invert(21%) sepia(98%) saturate(3089%) hue-rotate(215deg) brightness(95%) contrast(101%);
+        }
+
+        /* Section spacing */
+        .section-spacing {
+            padding: var(--cds-spacing-10, 4rem) 0;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--cds-layer, #ffffff);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #e5f6ff;
+            border-left: 4px solid #0f62fe;
+            padding: var(--cds-spacing-06, 1.5rem);
+            margin: var(--cds-spacing-06, 1.5rem) 0;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+            color: #0f62fe;
+            font-size: 1rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0;
+            color: var(--cds-text-primary, #161616);
+        }
+
+        /* Test Cards Grid */
+        .test-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--cds-spacing-06, 1.5rem);
+        }
+
+        @media (max-width: 1056px) {
+            .test-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 672px) {
+            .test-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .test-card {
+            padding: var(--cds-spacing-06, 1.5rem);
+            border-left: 3px solid var(--cds-interactive-01, #0f62fe);
+            background: var(--cds-layer-01, #f4f4f4);
+            transition: all 0.2s ease;
+        }
+
+        .test-card:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-card h4 {
+            margin-bottom: var(--cds-spacing-04, 0.75rem);
+        }
+
+        .test-card p {
+            margin-bottom: 0;
+            color: var(--cds-text-secondary, #525252);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--cds-background-inverse, #161616);
+            color: var(--cds-text-inverse, #ffffff);
+            text-align: center;
+            padding: var(--cds-spacing-07, 2rem);
+            margin-top: var(--cds-spacing-10, 4rem);
+        }
+
+        footer p {
+            margin-bottom: var(--cds-spacing-03, 0.5rem);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="bx--grid">
+            <!-- Breadcrumb -->
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <div class="breadcrumb" style="background-color: transparent; padding: 0; margin-bottom: var(--cds-spacing-05, 1rem);">
+                        <a href="index.html">
+                            <svg class="breadcrumb-home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <path d="M16.6123,2.2138a1.01,1.01,0,0,0-1.2427,0L1,13.4194l1.2427,1.5717L4,13.6209V26a2.0041,2.0041,0,0,0,2,2H26a2.0037,2.0037,0,0,0,2-2V13.63L29.7573,15,31,13.4282ZM18,26H14V18h4Zm2,0V18a2.0023,2.0023,0,0,0-2-2H14a2.002,2.002,0,0,0-2,2v8H6V12.0615l10-7.79,10,7.8005V26Z"/>
+                            </svg>
+                        </a> / Test Page
+                    </div>
+                </div>
+            </div>
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <p style="font-size: 0.875rem; font-weight: 500; letter-spacing: 0.08em; margin-bottom: var(--cds-spacing-04, 0.75rem); color: var(--cds-text-secondary, #0a0a0a);">🧪 Testing Environment</p>
+                            <h1 class="bx--type-expressive-heading-06 hero-title">DevOps Testing Playground</h1>
+                            <p class="bx--type-body-long-02 hero-description">
+                                This is a test page created using the same template and styling as the existing pages in the Modern DevOps for IBM i website. It demonstrates the Carbon Design System components, IBM Plex font, and consistent layout patterns used throughout the site.
+                            </p>
+                        </div>
+                        <div class="hero-image-wrap">
+                            <img class="hero-image" src="devops.svg" alt="DevOps lifecycle">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section section-spacing">
+        <div class="bx--grid">
+            <div class="bx--row" style="margin-bottom: var(--cds-spacing-09, 3rem);">
+                <div class="bx--col-lg-16">
+                    <h2 class="bx--type-expressive-heading-05" style="margin-bottom: var(--cds-spacing-05, 1rem);">Test Content Section</h2>
+                    <p class="bx--type-body-long-02">
+                        This section demonstrates the standard content layout used across the site. The page follows the same structure as other pages, including the hero section with breadcrumb navigation, gradient background, and responsive grid layout.
+                    </p>
+                    
+                    <div class="info-box">
+                        <div class="info-box-title">Testing Note</div>
+                        <p>This is an info box component that can be used to highlight important information or notes throughout the page. It uses the Carbon Design System color palette and spacing tokens.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <h3 class="bx--type-productive-heading-04" style="margin-bottom: var(--cds-spacing-06, 1.5rem);">Test Cards</h3>
+                    <div class="test-cards-grid">
+                        <div class="test-card">
+                            <h4 class="bx--type-productive-heading-03">Test Card 1</h4>
+                            <p class="bx--type-body-long-01">This is a test card demonstrating the card component styling with hover effects and responsive grid layout.</p>
+                        </div>
+                        <div class="test-card">
+                            <h4 class="bx--type-productive-heading-03">Test Card 2</h4>
+                            <p class="bx--type-body-long-01">Cards automatically adjust to different screen sizes using the responsive grid system built into the template.</p>
+                        </div>
+                        <div class="test-card">
+                            <h4 class="bx--type-productive-heading-03">Test Card 3</h4>
+                            <p class="bx--type-body-long-01">The styling follows Carbon Design System guidelines with proper spacing, typography, and color usage.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="bx--grid">
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <p class="bx--type-body-short-01">Test Page - Modern DevOps for IBM i</p>
+                    <p class="bx--type-body-short-01" style="color: var(--cds-text-secondary, #c6c6c6);">Built with Carbon Design System</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
