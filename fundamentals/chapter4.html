@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adopting a DevOps culture</title>
+    <title>The Integrated File System (IFS)</title>
     
     <!-- IBM Plex Font -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -36,21 +36,17 @@
                         <a href="chapter3.html" class="nav-link">IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link active">Adopting a DevOps culture</a>
+                        <a href="chapter4.html" class="nav-link active">The Integrated File System (IFS)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter5.html" class="nav-link">Source management with Git</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter6.html" class="nav-link">Getting started: your first 30–60 days</a>
                     </li>
                 </ul>
             </div>
             <div class="nav-section">
-               <!-- Lab exercises
-                 <div class="nav-section-title">Lab exercises</div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 2</a>
-                    </li>
-                </ul> -->
                 <div class="nav-section-title">Additional learning resources</div>
             </div>
         </nav>
@@ -66,38 +62,48 @@
             </div>
 
             <article>
-                <h1>Adopting a DevOps culture</h1>
-                <p class="lead">Content placeholder - This topic will cover Adopting a DevOps culture.</p>
+                <h1>The Integrated File System (IFS)</h1>
+                <p class="lead">The Integrated File System (IFS) plays a central operational role in modern IBM i development, particularly as organizations adopt DevOps practices and open-source tooling. Unlike the traditional QSYS.LIB environment used for storing and managing compiled IBM i objects, the IFS provides a POSIX-style filesystem that behaves similarly to those found on Linux, UNIX, and macOS systems.</p>
 
-                <h2>Key concepts</h2>
-                <p>Content to be added:</p>
+                <p>This capability significantly broadens what developers can do on IBM i by enabling direct use of open-source utilities, language runtimes, shell scripts, and cross-platform tools that expect a standards-based file structure.</p>
+
+                <p>Because the IFS supports ordinary text files, it becomes the natural home for the wide range of artifacts used in today's DevOps workflows. YAML and JSON configuration files, pipeline definitions, testing frameworks, formatting tools, source linters, and shell-based build automation can all run directly against IFS-hosted content. This flexibility also improves interoperability. CI/CD platforms, distributed version control systems, and open-source build tools can exchange files with the IFS just as they would with any other standards-based filesystem. As a result, IBM i can participate seamlessly in multiplatform automation pipelines without requiring custom adapters or proprietary workflows.</p>
+
+                <p>Modern IBM i development environments, particularly those based on VS Code, SSH workflows, or remote editing tools, typically use the IFS as their staging area. Developers retrieve source from Git into the IFS or synchronize workstation files directly to IFS paths where scripts, compilation steps, and automated processes can access them. The resulting compiled objects, however, do not remain in the IFS — they are placed into IBM i libraries, which continue to serve as the system's authoritative runtime containers. This arrangement reinforces a clean separation between development artifacts and production objects: the IFS holds source, scripts, and configuration, while libraries store the executable objects that the IBM i runtime uses.</p>
+
+                <p>A consistent and reliable DevOps pattern emerges from this separation. Source code is pulled from Git into an IFS workspace, where build scripts execute predictable compile commands that generate modules, service programs, and other runtime objects into a controlled build library. From there, the deployment process promotes those objects through test and production environments using automated controls and approvals. This workflow isolates the "source world," where developers and tools manipulate text files in the IFS, from the "runtime world," where libraries hold compiled artifacts. The distinction simplifies troubleshooting by enabling teams to verify exactly which source produced a given object, and it reduces rollback risk by ensuring that runtime environments can be restored from version-controlled source and scripted builds rather than manually edited objects.</p>
+
+                <p>By providing a familiar filesystem model and serving as a reliable bridge between open-source tooling and IBM i's object-based runtime, the IFS has become a cornerstone of modern DevOps practices on the platform. It allows IBM i to integrate cleanly with contemporary development ecosystems while preserving the strengths of the underlying architecture. In this way, the IFS is not merely a compatibility feature — it is an essential enabler of modern, automated, and maintainable delivery pipelines.</p>
+
+                <h2>Why the IFS matters for DevOps</h2>
+
+                <p>The IFS gives IBM i a familiar POSIX-style filesystem, which makes it easier to:</p>
+
                 <ul>
-                    <li><strong>Concept 1:</strong> Description to be added</li>
-                    <li><strong>Concept 2:</strong> Description to be added</li>
-                    <li><strong>Concept 3:</strong> Description to be added</li>
-                    <li><strong>Concept 4:</strong> Description to be added</li>
+                    <li>Work with <strong>open-source tools</strong> (linters, formatters, test runners)</li>
+                    <li>Store and manipulate <strong>text files</strong> (YAML, JSON, scripts, pipeline config)</li>
+                    <li>Exchange artifacts with non-IBM i systems during CI/CD</li>
                 </ul>
 
-                <h2>Section heading</h2>
-                <p>Content placeholder - Additional information will be added here.</p>
+                <p>Many modern IBM i workflows (e.g., VS Code + SSH, scriptable builds) naturally use the IFS as the staging area while compiled objects still land in libraries.</p>
 
-                <h3>Subsection</h3>
-                <p>Content placeholder - Detailed information about this subsection will be added here.</p>
+                <h2>A simple, safe pattern</h2>
+
+                <ol>
+                    <li><strong>Pull source from Git</strong> into the IFS (or your workstation syncs to the IFS)</li>
+                    <li><strong>Run build scripts</strong> that compile from the IFS into a <strong>build library</strong></li>
+                    <li><strong>Promote</strong> the built objects through <strong>TEST → PROD</strong> with automated steps and approvals</li>
+                </ol>
 
                 <div class="info-box">
                     <div class="info-box-title">Key Insight</div>
-                    <p>Content placeholder - Important insights about this topic will be added here.</p>
-                </div>
-
-                <div class="warning-box">
-                    <div class="warning-box-title">Important Consideration</div>
-                    <p>Content placeholder - Important considerations and best practices will be added here.</p>
+                    <p>This cleanly separates "source world" (IFS) from "runtime world" (libraries), which simplifies troubleshooting and rollback.</p>
                 </div>
 
                 <!-- Navigation -->
                 <nav class="page-nav">
                     <a href="chapter3.html" class="page-nav-link page-nav-left">← Previous: IBM i architecture essentials</a>
-                    <a href="../tools/index.html" class="page-nav-link page-nav-right">Next: Module 2 →</a>
+                    <a href="chapter5.html" class="page-nav-link page-nav-right">Next: Source management with Git →</a>
                 </nav>
             </article>
         </main>

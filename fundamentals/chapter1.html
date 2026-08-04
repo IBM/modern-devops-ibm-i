@@ -36,27 +36,23 @@
                         <a href="chapter3.html" class="nav-link">IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link">Adopting a DevOps culture</a>
+                        <a href="chapter4.html" class="nav-link">The Integrated File System (IFS)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter5.html" class="nav-link">Source management with Git</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter6.html" class="nav-link">Getting started: your first 30–60 days</a>
                     </li>
                 </ul>
             </div>
             <div class="nav-section">
-               <!-- Lab exercises
-                 <div class="nav-section-title">Lab exercises</div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 2</a>
-                    </li>
-                </ul> -->
                 <div class="nav-section-title">Additional learning resources</div>
             </div>
         </nav>
 
         <!-- Main Content -->
-        <main class="main-content with-right-sidebar">
+        <main class="main-content">
             <div class="breadcrumb">
                 <a href="../index.html">
                     <svg class="breadcrumb-home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -66,34 +62,44 @@
             </div>
 
             <article>
-                
-
                 <h1>DevOps 101</h1>
-                <p class="lead">Content placeholder - This topic will cover specific DevOps 101.</p>
-                
-                <h2>Key concepts</h2>
-                <p>Content to be added:</p>
+                <p class="lead">In the IBM i context, DevOps is fundamentally about visibility and repeatability. Every change is tracked in Git, and builds are executed the same way every time through scripts or pipelines, eliminating the guesswork of manual steps.</p>
+
+                <p>This approach encourages small, safe changes that are easier to validate and roll back when necessary. It also supports true separation of duties through automation with approvals and controls embedded in the pipeline itself, making them auditable and consistent instead of relying on ad hoc emails or chat messages.</p>
+
+                <h2>What DevOps really means here</h2>
+
                 <ul>
-                    <li><strong>Concept 1:</strong> Description to be added</li>
-                    <li><strong>Concept 2:</strong> Description to be added</li>
-                    <li><strong>Concept 3:</strong> Description to be added</li>
-                    <li><strong>Concept 4:</strong> Description to be added</li>
+                    <li><strong>Visibility and repeatability:</strong> Track every change (Git), build the same way every time (scripts/pipelines).</li>
+                    <li><strong>Small, safe changes:</strong> Fewer surprises, easier rollbacks.</li>
+                    <li><strong>Separation of duties with automation:</strong> Approvals happen inside the pipeline (auditable), not in emails or chats.</li>
                 </ul>
 
-                
-                <h2>Section heading</h2>
-                <p>Content placeholder - Additional information will be added here.</p>
+                <h2>Common fears and how to address them</h2>
 
-                
+                <p>Teams often have concerns when adopting modern DevOps, but each one has a practical path forward.</p>
+
+                <p><strong>"We'll break something."</strong> Start with one app, one pipeline. Keep promotions automated but gated; add tests over time.</p>
+
+                <p><strong>"We don't have time to learn all this."</strong> You don't need everything at once. A simple sequence — Git first, then automated builds, then tests, then deployment — keeps progress manageable.</p>
+
+                <p><strong>"Our processes already work."</strong> Modern DevOps doesn't replace good processes, it captures them, so they become consistent, faster, and easier to recover when issues occur.</p>
+
+                <h2>Minimum viable pipeline</h2>
+
+                <p>A minimum viable pipeline on IBM i follows a straightforward path: developers commit code to Git, an automated process compiles the application into a dedicated build library, basic tests run (such as RPGUnit or SQL-based checks), an approval step provides oversight, and then the pipeline promotes objects to test or production environments automatically.</p>
+
+                <ol>
+                    <li>Commit to <strong>Git</strong></li>
+                    <li><strong>Automated compile</strong> to a build library</li>
+                    <li><strong>Basic tests</strong> (RPGUnit / SQL checks)</li>
+                    <li><strong>Approval</strong></li>
+                    <li><strong>Automated promotion</strong> to TEST/PROD</li>
+                </ol>
 
                 <div class="info-box">
                     <div class="info-box-title">Key Insight</div>
-                    <p>Content placeholder - Important insights about this topic will be added here.</p>
-                </div>
-
-                <div class="warning-box">
-                    <div class="warning-box-title">Important Consideration</div>
-                    <p>Content placeholder - Important considerations and best practices will be added here.</p>
+                    <p>The specific tooling — whether Jenkins, GitHub Actions, GitLab CI, or Azure DevOps — is flexible. What matters most is choosing a platform your team can support, because consistency matters more than the brand behind the pipeline.</p>
                 </div>
 
                 <!-- Navigation -->
@@ -103,36 +109,6 @@
                 </nav>
             </article>
         </main>
-
-        <!-- Right Sidebar -->
-        <aside class="right-sidebar">
-            <div class="right-sidebar-header">
-                <div class="right-sidebar-title">Key Points</div>
-            </div>
-
-            <ul class="key-points-list">
-                <li class="key-point-item">
-                    <div class="key-point-title">Key Point 1</div>
-                    <div class="key-point-description">Content placeholder - Key point description to be added.</div>
-                </li>
-                <li class="key-point-item">
-                    <div class="key-point-title">Key Point 2</div>
-                    <div class="key-point-description">Content placeholder - Key point description to be added.</div>
-                </li>
-                <li class="key-point-item">
-                    <div class="key-point-title">Key Point 3</div>
-                    <div class="key-point-description">Content placeholder - Key point description to be added.</div>
-                </li>
-                <li class="key-point-item">
-                    <div class="key-point-title">Key Point 4</div>
-                    <div class="key-point-description">Content placeholder - Key point description to be added.</div>
-                </li>
-                <li class="key-point-item">
-                    <div class="key-point-title">Key Point 5</div>
-                    <div class="key-point-description">Content placeholder - Key point description to be added.</div>
-                </li>
-            </ul>
-        </aside>
     </div>
 </body>
 </html>

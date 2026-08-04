@@ -36,21 +36,17 @@
                         <a href="chapter3.html" class="nav-link">IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link">Adopting a DevOps culture</a>
+                        <a href="chapter4.html" class="nav-link">The Integrated File System (IFS)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter5.html" class="nav-link">Source management with Git</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter6.html" class="nav-link">Getting started: your first 30–60 days</a>
                     </li>
                 </ul>
             </div>
             <div class="nav-section">
-               <!-- Lab exercises
-                 <div class="nav-section-title">Lab exercises</div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 2</a>
-                    </li>
-                </ul> -->
                 <div class="nav-section-title">Additional learning resources</div>
             </div>
         </nav>
@@ -67,27 +63,33 @@
 
             <article>
                 <h1>Traditional IBM i vs modern DevOps workflows</h1>
-                <p class="lead">Content placeholder - This topic will cover Traditional IBM i vs modern DevOps workflows.</p>
+                <p class="lead">In many traditional IBM i applications, business logic, 5250 user interface flow, and database access are tightly combined within the same programs. This design made perfect sense when applications were smaller and teams were centralized, but it makes change slower and riskier today.</p>
+
+                <p>Manual compile and promotion steps, dependence on organizational silo knowledge, and limited automation are common patterns, especially challenging when teams are under time pressure or when key experts are unavailable.</p>
+
+                <p>A modern approach doesn't require rewriting everything. The biggest shift is modularization: breaking large programs into service programs made of reusable procedures. This single architectural change improves testability, reduces risk, and enables reliable CI/CD pipelines. Complementing this, a datacentric or SQL-first approach moves data rules, such as keys, constraints, triggers, and views into the database itself, allowing application code to stay cleaner and easier to maintain. Updated tooling such as VS Code or RDi with IBM i extensions brings modern editing, integrated compile capabilities, and Git-based workflows to the platform. Once core logic is modular and datacentric, organizations can safely add APIs, REST/JSON interfaces, or refreshed UIs; doing these too early often leads to fragile integrations.</p>
 
                 <h2>Key concepts</h2>
 
-                <h3>Concept area 1</h3>
-                <p>Content placeholder - Detailed information about this concept will be added here.</p>
+                <h3>The traditional patterns</h3>
 
-                <p>Additional details to be added.</p>
+                <p>Business logic, UI flow (5250), and database access often live in the same programs. This made sense when apps were smaller, but it complicates change today.</p>
 
-                <h3>Concept area 2</h3>
-                <p><strong>Point 1:</strong> Content to be added.</p>
+                <p>Manual compile/promotion steps, dependence on organizational silo knowledge, and limited automation are common, and risky under time pressure.</p>
 
-                <p><strong>Point 2:</strong> Content to be added.</p>
+                <h3>The modern approach</h3>
 
-                <p><strong>Point 3:</strong> Content to be added.</p>
+                <p><strong>Modularization:</strong> Split large programs into service programs with reusable procedures. This is the single biggest enabler for safer changes and pipelines.</p>
 
-                <p><strong>Point 4:</strong> Content to be added.</p>
+                <p><strong>Datacentric (SQL-first):</strong> Move data rules to the database (keys, constraints, triggers, views); keep programs thinner and easier to test.</p>
+
+                <p><strong>Tooling upgrade:</strong> Use VS Code (or RDi) + IBM i extensions for editing, integrated compile, and Git.</p>
+
+                <p><strong>APIs &amp; interfaces:</strong> Add REST/JSON or UI refacing after the core is modular and datacentric; doing it earlier often fails.</p>
 
                 <div class="info-box">
                     <div class="info-box-title">Quick Win</div>
-                    <p>Content placeholder - Practical tips and quick wins will be added here.</p>
+                    <p>Identify one big program you work with often. Extract a small, low-risk piece — such as a calculation — into a service program and call it from the original. That's modernization, no UI changes required.</p>
                 </div>
 
                 <!-- Navigation -->

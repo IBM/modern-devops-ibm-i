@@ -36,21 +36,17 @@
                         <a href="chapter3.html" class="nav-link active">IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link">Adopting a DevOps culture</a>
+                        <a href="chapter4.html" class="nav-link">The Integrated File System (IFS)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter5.html" class="nav-link">Source management with Git</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="chapter6.html" class="nav-link">Getting started: your first 30–60 days</a>
                     </li>
                 </ul>
             </div>
             <div class="nav-section">
-               <!-- Lab exercises
-                 <div class="nav-section-title">Lab exercises</div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Exercise 2</a>
-                    </li>
-                </ul> -->
                 <div class="nav-section-title">Additional learning resources</div>
             </div>
         </nav>
@@ -67,32 +63,41 @@
 
             <article>
                 <h1>IBM i architecture essentials</h1>
-                <p class="lead">Content placeholder - This topic will explore IBM i architecture essentials.</p>
+                <p class="lead">IBM i is a fully integrated operating system developed for IBM Power. The database, middleware, security, runtime, and hypervisor are all integrated into the stack and licensed as one. This integration helps lower total cost of ownership (TCO), simplify systems management, and do more with fewer resources.</p>
 
-                <h2>Key concepts</h2>
-                <p>Content to be added:</p>
+                <p>Below are additional details for just a few things possible with IBM i:</p>
+
                 <ul>
-                    <li><strong>Concept 1:</strong> Description to be added</li>
-                    <li><strong>Concept 2:</strong> Description to be added</li>
-                    <li><strong>Concept 3:</strong> Description to be added</li>
-                    <li><strong>Concept 4:</strong> Description to be added</li>
+                    <li><strong>Lower TCO:</strong> IBM i integrates database, middleware, security, runtime, and hypervisor into one solution, reducing TCO and simplifying support for business applications.</li>
+                    <li><strong>Secure Business-Critical Applications:</strong> IBM i 7.6 introduces built-in multi-factor authentication (MFA) to ensure only authorized users can access systems and applications.</li>
+                    <li><strong>Deploy Workloads Anywhere:</strong> IBM i can be run on-prem, in an onsite private cloud with consumption-based pricing, or in a public cloud on IBM Power Virtual Server (VS).</li>
+                    <li><strong>Modernize Application Development:</strong> Eliminate skills gaps and increase productivity by using industry-standard tools available with IBM i for modern application development.</li>
                 </ul>
 
-                <h2>Section heading</h2>
-                <p>Content placeholder - Additional information will be added here.</p>
+                <p>IBM i's stack integration design eliminates much of the "glue work" required on other platforms and contributes to IBM i's reputation for mission-critical reliability. Power-based systems running IBM i consistently achieve industry-leading uptime in independent Power surveys. A major strength of the platform is its long-term compatibility: applications written decades ago still run today with minimal changes, allowing modernization efforts to focus on evolution instead of expensive rewrites.</p>
 
-                <h3>Subsection</h3>
-                <p>Content placeholder - Detailed information about this subsection will be added here.</p>
+                <p>From a developer or DevOps standpoint, the core building blocks you'll encounter include IBM i's object-and-library model, where compiled code becomes objects stored in libraries, as well as Db2 for i, the integrated relational database increasingly used in SQL-first development. The Integrated File System (IFS) provides a POSIX-like environment that works well with open-source tools, while IBM Power virtualization and automation capabilities support modern CI/CD, hybrid cloud patterns, and infrastructure automation whenever you're ready for them.</p>
+
+                <p>All this integration means you can adopt DevOps on IBM i <strong>gradually and pragmatically</strong>. You don't need to replace existing workflows; instead, you can layer version control, automated builds, testing, and promotion on top of what already works today. A practical first step is to choose one application and document how it compiles now: which commands it uses, where objects land, and what libraries are involved. This understanding becomes the foundation for building your first automated pipeline.</p>
+
+                <h2>Key building blocks you'll work with</h2>
+
+                <ul>
+                    <li><strong>Objects and libraries:</strong> Compiles produce objects that live in libraries (think "runtimes," not source).</li>
+                    <li><strong>Db2 for i:</strong> The integrated relational database; modern development benefits from SQL-first design.</li>
+                    <li><strong>IFS (Integrated File System):</strong> A POSIX-like filesystem on IBM i that's friendly to open-source tooling.</li>
+                    <li><strong>Power virtualization &amp; automation:</strong> IBM Power platform supports modern automation, CI/CD, and hybrid cloud patterns when you're ready to expand.</li>
+                </ul>
 
                 <div class="info-box">
                     <div class="info-box-title">Key Insight</div>
-                    <p>Content placeholder - Important insights about this topic will be added here.</p>
+                    <p>A practical first step is to choose one application and document how it compiles now: which commands it uses, where objects land, and what libraries are involved. This understanding becomes the foundation for building your first automated pipeline.</p>
                 </div>
 
                 <!-- Navigation -->
                 <nav class="page-nav">
                     <a href="chapter2.html" class="page-nav-link page-nav-left">← Previous: Traditional IBM i vs modern DevOps workflows</a>
-                    <a href="chapter4.html" class="page-nav-link page-nav-right">Next: Adopting a DevOps culture →</a>
+                    <a href="chapter4.html" class="page-nav-link page-nav-right">Next: The Integrated File System (IFS) →</a>
                 </nav>
             </article>
         </main>
