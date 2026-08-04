@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5. Source management with Git</title>
+    <title>5. The Integrated File System (IFS)</title>
     
     <!-- IBM Plex Font -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -31,19 +31,19 @@
                 <div class="nav-section-title">Topics</div>
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="chapter1.html" class="nav-link">1. DevOps 101</a>
+                        <a href="chapter1.html" class="nav-link">1. IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
                         <a href="chapter2.html" class="nav-link">2. Traditional IBM i vs modern DevOps workflows</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter3.html" class="nav-link">3. IBM i architecture essentials</a>
+                        <a href="chapter3.html" class="nav-link">3. DevOps 101</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link">4. The Integrated File System (IFS)</a>
+                        <a href="chapter4.html" class="nav-link">4. Source management with Git</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter5.html" class="nav-link active">5. Source management with Git</a>
+                        <a href="chapter5.html" class="nav-link active">5. The Integrated File System (IFS)</a>
                     </li>
                     <li class="nav-item">
                         <a href="chapter6.html" class="nav-link">6. Getting started: your first 30–60 days</a>
@@ -66,56 +66,47 @@
             </div>
 
             <article>
-                <h1>5. Source management with Git</h1>
-                <p class="lead">Git plays a central role in modern IBM i development because it provides a single, authoritative repository for all human-authored source artifacts. Traditional IBM i development often relied on source stored in multiple locations, with individual developers maintaining their own compile processes or relying on undocumented tribal knowledge to promote changes.</p>
+                <h1>5. The Integrated File System (IFS)</h1>
+                <p class="lead">The Integrated File System (IFS) plays a central operational role in modern IBM i development, particularly as organizations adopt DevOps practices and open-source tooling. Unlike the traditional QSYS.LIB environment used for storing and managing compiled IBM i objects, the IFS provides a POSIX-style filesystem that behaves similarly to those found on Linux, UNIX, and macOS systems.</p>
 
-                <p>By consolidating all source into a version-controlled repository, Git eliminates ambiguity regarding which version of the source is current, who changed what, and how changes should be integrated. Git's full historical record, combined with structured collaboration methods such as pull requests, provides transparency and traceability that manual methods cannot reproduce.</p>
+                <p>This capability significantly broadens what developers can do on IBM i by enabling direct use of open-source utilities, language runtimes, shell scripts, and cross-platform tools that expect a standards-based file structure.</p>
 
-                <p>In the IBM i context, Git does not replace the existing object and library model but complements it by clearly separating the intent of developers from the compiled output executed on the system. Source files (RPG, COBOL, CL, SQL, DDS/DDL), shell scripts, Makefiles, and other human-generated assets belong in Git. Compiled objects, produced by the system from those source files, belong in runtime libraries. This distinction ensures that libraries retain their proper role as deployment locations rather than being used interchangeably for development work. Establishing this separation strengthens consistency across environments and makes it possible to reproduce builds reliably.</p>
+                <p>Because the IFS supports ordinary text files, it becomes the natural home for the wide range of artifacts used in today's DevOps workflows. YAML and JSON configuration files, pipeline definitions, testing frameworks, formatting tools, source linters, and shell-based build automation can all run directly against IFS-hosted content. This flexibility also improves interoperability. CI/CD platforms, distributed version control systems, and open-source build tools can exchange files with the IFS just as they would with any other standards-based filesystem. As a result, IBM i can participate seamlessly in multiplatform automation pipelines without requiring custom adapters or proprietary workflows.</p>
 
-                <p>A key enabler of this separation is the introduction of build scripts. Before implementing pipelines or advanced automation, teams must capture the exact steps needed to transform source into runtime objects. A build script serves as a stable definition of how an application is compiled, which libraries are used, what parameters are required, and how the resulting objects should be packaged or deployed. Even a simple script that compiles a single module is sufficient to begin establishing consistency. Over time, this script becomes the foundation for automated processes, ensuring that all developers and tools use the same build logic, independent of personal habits or environment variations.</p>
+                <p>Modern IBM i development environments, particularly those based on VS Code, SSH workflows, or remote editing tools, typically use the IFS as their staging area. Developers retrieve source from Git into the IFS or synchronize workstation files directly to IFS paths where scripts, compilation steps, and automated processes can access them. The resulting compiled objects, however, do not remain in the IFS — they are placed into IBM i libraries, which continue to serve as the system's authoritative runtime containers. This arrangement reinforces a clean separation between development artifacts and production objects: the IFS holds source, scripts, and configuration, while libraries store the executable objects that the IBM i runtime uses.</p>
 
-                <p>Effective source management also requires that all supporting artifacts — not only source code — be versioned in Git. Library lists, compile settings, testing utilities, SQL migration files, configuration parameters, and deployment metadata should all be stored alongside the application's code. This creates a unified, reproducible definition of the application and its environment. The result is a development process where every element needed to rebuild the application is captured in version control rather than scattered across personal notes or individual workstations.</p>
+                <p>A consistent and reliable DevOps pattern emerges from this separation. Source code is pulled from Git into an IFS workspace, where build scripts execute predictable compile commands that generate modules, service programs, and other runtime objects into a controlled build library. From there, the deployment process promotes those objects through test and production environments using automated controls and approvals. This workflow isolates the "source world," where developers and tools manipulate text files in the IFS, from the "runtime world," where libraries hold compiled artifacts. The distinction simplifies troubleshooting by enabling teams to verify exactly which source produced a given object, and it reduces rollback risk by ensuring that runtime environments can be restored from version-controlled source and scripted builds rather than manually edited objects.</p>
 
-                <p>Branching strategies should remain intentionally simple. Given that IBM i applications often have tightly coupled components and frequent deployment cycles, a model built around a stable main branch and short-lived feature branches typically offers the best balance of flexibility and control. This approach reduces process overhead while still supporting structured reviews and controlled integration.</p>
+                <p>By providing a familiar filesystem model and serving as a reliable bridge between open-source tooling and IBM i's object-based runtime, the IFS has become a cornerstone of modern DevOps practices on the platform. It allows IBM i to integrate cleanly with contemporary development ecosystems while preserving the strengths of the underlying architecture. In this way, the IFS is not merely a compatibility feature — it is an essential enabler of modern, automated, and maintainable delivery pipelines.</p>
 
-                <p>Treating runtime libraries strictly as the output of the build process is equally important. Manual changes to objects in runtime libraries introduce drift, undermine reproducibility, and create uncertainty when investigating production issues. Ensuring that all runtime objects originate from Git through a defined build process eliminates these risks and reinforces the integrity of the deployment workflow.</p>
+                <h2>Why the IFS matters for DevOps</h2>
 
-                <p>Together, these practices form the source management backbone of a modern IBM i development environment. They connect directly to the themes explored earlier in this series: the architectural clarity of IBM i, the modernization of development techniques, and the adoption of modern DevOps principles focused on consistency and visibility. With source defined in Git, build steps documented in scripts, and deployment libraries treated strictly as runtime destinations, teams gain a reliable and repeatable foundation from which automated testing, approvals, and CI/CD pipelines can be introduced with significantly reduced risk.</p>
-
-                <h2>Why Git on IBM i?</h2>
+                <p>The IFS gives IBM i a familiar POSIX-style filesystem, which makes it easier to:</p>
 
                 <ul>
-                    <li>Single source of truth, full history, easy collaboration and rollback</li>
-                    <li>Works with pull requests and code review so knowledge isn't trapped in inboxes</li>
-                    <li>Integrates directly with CI/CD tools when you're ready</li>
+                    <li>Work with <strong>open-source tools</strong> (linters, formatters, test runners)</li>
+                    <li>Store and manipulate <strong>text files</strong> (YAML, JSON, scripts, pipeline config)</li>
+                    <li>Exchange artifacts with non-IBM i systems during CI/CD</li>
                 </ul>
 
-                <h2>Mapping IBM i to Git</h2>
+                <p>Many modern IBM i workflows (e.g., VS Code + SSH, scriptable builds) naturally use the IFS as the staging area while compiled objects still land in libraries.</p>
 
-                <ul>
-                    <li><strong>Git repo:</strong> where <strong>source</strong> lives (RPG, COBOL, CL, SQL, scripts)</li>
-                    <li><strong>Compile:</strong> transforms source into <strong>objects</strong> placed in <strong>libraries</strong> (runtime)</li>
-                    <li><strong>Pipeline:</strong> the "robot" that runs your compile and promotions the same way every time</li>
-                </ul>
+                <h2>A simple, safe pattern</h2>
 
-                <h2>Practical starter rules</h2>
-
-                <ul>
-                    <li>Put all application source in Git, including CL, SQL, DDS/DDL, and build scripts</li>
-                    <li>Use a simple branching model (e.g., <strong>main</strong> + <strong>feature/</strong> branches) to start</li>
-                    <li>Add a <strong>build script</strong> that compiles from source to a dedicated build library — make that the single path to runtime objects</li>
-                    <li>Keep <strong>environment config</strong> (library lists, target libs) in versioned scripts so you can reproduce builds later</li>
-                </ul>
+                <ol>
+                    <li><strong>Pull source from Git</strong> into the IFS (or your workstation syncs to the IFS)</li>
+                    <li><strong>Run build scripts</strong> that compile from the IFS into a <strong>build library</strong></li>
+                    <li><strong>Promote</strong> the built objects through <strong>TEST → PROD</strong> with automated steps and approvals</li>
+                </ol>
 
                 <div class="info-box">
-                    <div class="info-box-title">Tip</div>
-                    <p>Your first "automation" can be a single shell or Makefile that builds one module. Pipelines come next, using the same script.</p>
+                    <div class="info-box-title">Key Insight</div>
+                    <p>This cleanly separates "source world" (IFS) from "runtime world" (libraries), which simplifies troubleshooting and rollback.</p>
                 </div>
 
                 <!-- Navigation -->
                 <nav class="page-nav">
-                    <a href="chapter4.html" class="page-nav-link page-nav-left">← Previous: The Integrated File System (IFS)</a>
+                    <a href="chapter4.html" class="page-nav-link page-nav-left">← Previous: Source management with Git</a>
                     <a href="chapter6.html" class="page-nav-link page-nav-right">Next: Getting started: your first 30–60 days →</a>
                 </nav>
             </article>

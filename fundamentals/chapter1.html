@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1. DevOps 101</title>
+    <title>1. IBM i architecture essentials</title>
     
     <!-- IBM Plex Font -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -31,19 +31,19 @@
                 <div class="nav-section-title">Topics</div>
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="chapter1.html" class="nav-link active">1. DevOps 101</a>
+                        <a href="chapter1.html" class="nav-link active">1. IBM i architecture essentials</a>
                     </li>
                     <li class="nav-item">
                         <a href="chapter2.html" class="nav-link">2. Traditional IBM i vs modern DevOps workflows</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter3.html" class="nav-link">3. IBM i architecture essentials</a>
+                        <a href="chapter3.html" class="nav-link">3. DevOps 101</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter4.html" class="nav-link">4. The Integrated File System (IFS)</a>
+                        <a href="chapter4.html" class="nav-link">4. Source management with Git</a>
                     </li>
                     <li class="nav-item">
-                        <a href="chapter5.html" class="nav-link">5. Source management with Git</a>
+                        <a href="chapter5.html" class="nav-link">5. The Integrated File System (IFS)</a>
                     </li>
                     <li class="nav-item">
                         <a href="chapter6.html" class="nav-link">6. Getting started: your first 30–60 days</a>
@@ -66,44 +66,36 @@
             </div>
 
             <article>
-                <h1>1. DevOps 101</h1>
-                <p class="lead">In the IBM i context, DevOps is fundamentally about visibility and repeatability. Every change is tracked in Git, and builds are executed the same way every time through scripts or pipelines, eliminating the guesswork of manual steps.</p>
+                <h1>1. IBM i architecture essentials</h1>
+                <p class="lead">IBM i is a fully integrated operating system developed for IBM Power. The database, middleware, security, runtime, and hypervisor are all integrated into the stack and licensed as one. This integration helps lower total cost of ownership (TCO), simplify systems management, and do more with fewer resources.</p>
 
-                <p>This approach encourages small, safe changes that are easier to validate and roll back when necessary. It also supports true separation of duties through automation with approvals and controls embedded in the pipeline itself, making them auditable and consistent instead of relying on ad hoc emails or chat messages.</p>
-
-                <h2>What DevOps really means here</h2>
+                <p>Below are additional details for just a few things possible with IBM i:</p>
 
                 <ul>
-                    <li><strong>Visibility and repeatability:</strong> Track every change (Git), build the same way every time (scripts/pipelines).</li>
-                    <li><strong>Small, safe changes:</strong> Fewer surprises, easier rollbacks.</li>
-                    <li><strong>Separation of duties with automation:</strong> Approvals happen inside the pipeline (auditable), not in emails or chats.</li>
+                    <li><strong>Lower TCO:</strong> IBM i integrates database, middleware, security, runtime, and hypervisor into one solution, reducing TCO and simplifying support for business applications.</li>
+                    <li><strong>Secure Business-Critical Applications:</strong> IBM i 7.6 introduces built-in multi-factor authentication (MFA) to ensure only authorized users can access systems and applications.</li>
+                    <li><strong>Deploy Workloads Anywhere:</strong> IBM i can be run on-prem, in an onsite private cloud with consumption-based pricing, or in a public cloud on IBM Power Virtual Server (VS).</li>
+                    <li><strong>Modernize Application Development:</strong> Eliminate skills gaps and increase productivity by using industry-standard tools available with IBM i for modern application development.</li>
                 </ul>
 
-                <h2>Common fears and how to address them</h2>
+                <p>IBM i's stack integration design eliminates much of the "glue work" required on other platforms and contributes to IBM i's reputation for mission-critical reliability. Power-based systems running IBM i consistently achieve industry-leading uptime in independent Power surveys. A major strength of the platform is its long-term compatibility: applications written decades ago still run today with minimal changes, allowing modernization efforts to focus on evolution instead of expensive rewrites.</p>
 
-                <p>Teams often have concerns when adopting modern DevOps, but each one has a practical path forward.</p>
+                <p>From a developer or DevOps standpoint, the core building blocks you'll encounter include IBM i's object-and-library model, where compiled code becomes objects stored in libraries, as well as Db2 for i, the integrated relational database increasingly used in SQL-first development. The Integrated File System (IFS) provides a POSIX-like environment that works well with open-source tools, while IBM Power virtualization and automation capabilities support modern CI/CD, hybrid cloud patterns, and infrastructure automation whenever you're ready for them.</p>
 
-                <p><strong>"We'll break something."</strong> Start with one app, one pipeline. Keep promotions automated but gated; add tests over time.</p>
+                <p>All this integration means you can adopt DevOps on IBM i <strong>gradually and pragmatically</strong>. You don't need to replace existing workflows; instead, you can layer version control, automated builds, testing, and promotion on top of what already works today. A practical first step is to choose one application and document how it compiles now: which commands it uses, where objects land, and what libraries are involved. This understanding becomes the foundation for building your first automated pipeline.</p>
 
-                <p><strong>"We don't have time to learn all this."</strong> You don't need everything at once. A simple sequence — Git first, then automated builds, then tests, then deployment — keeps progress manageable.</p>
+                <h2>Key building blocks you'll work with</h2>
 
-                <p><strong>"Our processes already work."</strong> Modern DevOps doesn't replace good processes, it captures them, so they become consistent, faster, and easier to recover when issues occur.</p>
-
-                <h2>Minimum viable pipeline</h2>
-
-                <p>A minimum viable pipeline on IBM i follows a straightforward path: developers commit code to Git, an automated process compiles the application into a dedicated build library, basic tests run (such as RPGUnit or SQL-based checks), an approval step provides oversight, and then the pipeline promotes objects to test or production environments automatically.</p>
-
-                <ol>
-                    <li>Commit to <strong>Git</strong></li>
-                    <li><strong>Automated compile</strong> to a build library</li>
-                    <li><strong>Basic tests</strong> (RPGUnit / SQL checks)</li>
-                    <li><strong>Approval</strong></li>
-                    <li><strong>Automated promotion</strong> to TEST/PROD</li>
-                </ol>
+                <ul>
+                    <li><strong>Objects and libraries:</strong> Compiles produce objects that live in libraries (think "runtimes," not source).</li>
+                    <li><strong>Db2 for i:</strong> The integrated relational database; modern development benefits from SQL-first design.</li>
+                    <li><strong>IFS (Integrated File System):</strong> A POSIX-like filesystem on IBM i that's friendly to open-source tooling.</li>
+                    <li><strong>Power virtualization &amp; automation:</strong> IBM Power platform supports modern automation, CI/CD, and hybrid cloud patterns when you're ready to expand.</li>
+                </ul>
 
                 <div class="info-box">
                     <div class="info-box-title">Key Insight</div>
-                    <p>The specific tooling — whether Jenkins, GitHub Actions, GitLab CI, or Azure DevOps — is flexible. What matters most is choosing a platform your team can support, because consistency matters more than the brand behind the pipeline.</p>
+                    <p>A practical first step is to choose one application and document how it compiles now: which commands it uses, where objects land, and what libraries are involved. This understanding becomes the foundation for building your first automated pipeline.</p>
                 </div>
 
                 <!-- Navigation -->
