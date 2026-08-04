@@ -426,11 +426,57 @@ th {
     }
 }
 
+/* Hamburger button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    background: #161616;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar-toggle svg {
+    fill: #ffffff;
+    width: 20px;
+    height: 20px;
+}
+
+/* Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
 @media (max-width: 1056px) {
     .sidebar {
         transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        z-index: 100;
     }
-    
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: flex;
+    }
+
     .main-content,
     .main-content.with-right-sidebar {
         margin-left: 0;

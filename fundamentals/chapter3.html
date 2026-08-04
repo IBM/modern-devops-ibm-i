@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Open navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M4 6h24v2H4zm0 9h24v2H4zm0 9h24v2H4z"/></svg>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="docs-container">
         <!-- Sidebar Navigation -->
         <nav class="sidebar">
@@ -102,5 +106,14 @@
             </article>
         </main>
     </div>
+    <script>
+        var toggle = document.getElementById("sidebarToggle");
+        var overlay = document.getElementById("sidebarOverlay");
+        var sidebar = document.querySelector(".sidebar");
+        function openSidebar() { sidebar.classList.add("open"); overlay.classList.add("active"); }
+        function closeSidebar() { sidebar.classList.remove("open"); overlay.classList.remove("active"); }
+        toggle.addEventListener("click", openSidebar);
+        overlay.addEventListener("click", closeSidebar);
+    </script>
 </body>
 </html>
