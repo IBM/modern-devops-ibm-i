@@ -542,6 +542,10 @@ tr:hover td {
         padding: 2rem;
     }
 
+    .breadcrumb {
+        padding-left: 3.5rem;
+    }
+
     .tile-grid {
         grid-template-columns: repeat(2, 1fr);
     }
